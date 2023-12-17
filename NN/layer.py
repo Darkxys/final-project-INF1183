@@ -8,7 +8,7 @@ class Layer:
     def get_memory(self):
         return self.__memory
     
-    def predict(self, inputs : list[float]) -> list[float]:
+    def __predict(self, inputs : list[float]) -> list[float]:
         result = []
         for perceptron in self.__perceptrons:
             result.append(perceptron.predict(inputs))
@@ -20,7 +20,7 @@ class Layer:
             self.__memory.append(self.__perceptrons[i].predict([inputs[i]]))
 
     def forward_pass(self, prev_layer) -> None:
-        self.__memory = self.predict(prev_layer.get_memory())
+        self.__memory = self.__predict(prev_layer.get_memory())
     
     def __str__(self) -> str:
         s = "Layer : \n"
