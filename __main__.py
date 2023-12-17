@@ -8,6 +8,9 @@ from NN.trainers.base_trainer import BaseTrainer
 from NN.perceptron import Perceptron
 from NN.enums.activation_functions import ActivationFunctions
 
+from NN.neural_network import NeuralNetwork
+from NN.layer_config import LayerConfig
+
 mnist = fetch_openml(name='mnist_784', parser='auto')
 
 def display_some_images():
@@ -80,4 +83,26 @@ def test_perceptron():
     print("Loss on test data : " + str(test_results) + "\n")
     print("Perceptron : " + str(perceptron))
 
-test_perceptron()
+# test_perceptron()
+    
+def test_nn():
+    configs = [
+        LayerConfig(4, ActivationFunctions.ReLu),
+        LayerConfig(6, ActivationFunctions.Linear),
+        LayerConfig(2, ActivationFunctions.ReLu),
+    ]
+
+    nn = NeuralNetwork(configs)
+
+    print(str(nn))
+
+    res = nn.predict([
+        1,
+        2, 
+        -1,
+        0.5
+    ])
+
+    print("Result : " + str(res) + "\n")
+    
+test_nn()

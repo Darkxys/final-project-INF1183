@@ -2,8 +2,8 @@ from NN.exceptions.invalid_input_size_exception import InvalidInputSizeException
 from NN.enums.activation_functions import ActivationFunctions
 import random
 
-LOW = -10.0
-HIGH = 10.0
+LOW = -1.0
+HIGH = 1.0
 
 class Perceptron: 
     def __init__(self, n: int, activation: ActivationFunctions) -> None:
@@ -19,6 +19,8 @@ class Perceptron:
         return self.__activation.value(input)
     
     def predict(self, inputs : list[float]) -> float: 
+        print(str(inputs))
+        print(str(self.__weights))
         if len(inputs) != len(self.__weights):
             raise InvalidInputSizeException()
         
