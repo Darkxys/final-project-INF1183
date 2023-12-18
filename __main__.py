@@ -109,14 +109,9 @@ def test_nn():
     processed_y_train = np.array(processed_y_train)
 
     configs = [
-        # LayerConfig(4, ActivationFunctions.ReLu),
-        # LayerConfig(6, ActivationFunctions.Linear),
-        # LayerConfig(2, ActivationFunctions.ReLu),
         LayerConfig(784, ActivationFunctions.Linear),
-        LayerConfig(32, ActivationFunctions.Logistic),
-        LayerConfig(32, ActivationFunctions.Logistic),
-        LayerConfig(10, ActivationFunctions.ReLu),
-        # LayerConfig(1, ActivationFunctions.Logistic),
+        # LayerConfig(32, ActivationFunctions.Logistic),
+        LayerConfig(10, ActivationFunctions.Logistic),
     ]
 
     nn = NeuralNetwork(configs)
@@ -144,60 +139,5 @@ def test_nn():
     print("Result : " + str(acc))
 
     nn.export_model()
-
-    """[
-        [
-            1,
-            2,
-        ],
-        [
-            3,
-            4,
-        ],
-        [
-            0.5,
-            2,
-        ],
-        [
-            3,
-            2,
-        ],
-        [
-            1,
-            5,
-        ],
-    ], [
-        [
-            0.9,
-            0.5
-        ],
-        [
-            0.0,
-            0.3
-        ],
-        [
-            0.6,
-            0.5
-        ],
-        [
-            0.1,
-            0.1
-        ],
-        [
-            0.2,
-            0.4
-        ],
-    ], """
-
-    # print(str(nn))
-
-    # res = nn.predict([
-    #     1,
-    #     2, 
-    #     -1,
-    #     0.5
-    # ])
-
-    # print("Result : " + str(res) + "\n")
     
 test_nn()
