@@ -18,7 +18,7 @@ class Perceptron:
             self.__weights : np.ndarray[float] = [random.uniform(LOW, HIGH) for _ in range(n)]
             self.__bias : float = random.uniform(LOW, HIGH)
         else: 
-            self.__weights : np.ndarray[float] = [1 for _ in range(n)]
+            self.__weights : np.ndarray[float] = [0.5 for _ in range(n)]
             self.__bias : float = 0.0
         self.__activation : ActivationFunctions = activation
 
