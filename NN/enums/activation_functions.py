@@ -1,5 +1,6 @@
 from enum import Enum
 from collections.abc import Callable
+import math
 
 class Wrapper: 
     def __init__(self, function : Callable[[float], float]) -> None:
@@ -16,7 +17,11 @@ def ReLu(input: float) -> float:
 def Linear(input: float) -> float: 
     return input
 
+def Logistic(input: float) -> float:
+    return 1 / (1 + math.exp(-input))
+
 class ActivationFunctions(Enum): 
     ReLu = Wrapper(ReLu)
     Linear = Wrapper(Linear)
+    Logistic = Wrapper(Logistic)
 

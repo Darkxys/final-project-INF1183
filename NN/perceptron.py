@@ -1,16 +1,27 @@
 from NN.exceptions.invalid_input_size_exception import InvalidInputSizeException
 from NN.enums.activation_functions import ActivationFunctions
 import random
+import numpy as np
 
-LOW = -1.0
+import json
+from json import JSONEncoder
+from numpy_array_encoder import NumpyArrayEncoder
+
+LOW = 0.0
 HIGH = 1.0
 
 class Perceptron: 
-    def __init__(self, n: int, activation: ActivationFunctions) -> None:
-        self.__weights : list[float] = [random.uniform(LOW, HIGH) for _ in range(n)]
-        self.__bias : float = random.uniform(LOW, HIGH)
+    def __init__(self, n: int, activation: ActivationFunctions, is_input = False) -> None:
+        if not is_input: 
+            self.__weights : np.ndarray[float] = [random.uniform(LOW, HIGH) for _ in range(n)]
+            self.__bias : float = random.uniform(LOW, HIGH)
+        else: 
+            self.__weights : np.ndarray[float] = [0.5 for _ in range(n)]
+            self.__bias : float = 0.0
         self.__activation : ActivationFunctions = activation
 
+    def get_weights(self): 
+        return self.__weights
 
     def diff(self, output : float, expected : float) -> float:
         return 2 * (expected - output)
@@ -18,9 +29,7 @@ class Perceptron:
     def activate(self, input : float) -> float:
         return self.__activation.value(input)
     
-    def predict(self, inputs : list[float]) -> float: 
-        print(str(inputs))
-        print(str(self.__weights))
+    def predict(self, inputs : np.ndarray[float]) -> float: 
         if len(inputs) != len(self.__weights):
             raise InvalidInputSizeException()
         
@@ -30,7 +39,7 @@ class Perceptron:
 
         return self.activate(result)
 
-    def evaluate(self, inputs : list[list[float]], outputs : list[float]) -> float:
+    def evaluate(self, inputs : np.ndarray[np.ndarray[float]], outputs : np.ndarray[float]) -> float:
         if len(outputs) == 0:
             return 0
         
@@ -41,7 +50,7 @@ class Perceptron:
 
         return abs(loss / len(outputs))
     
-    def train(self, inputs : list[list[float]], outputs : list[float], learning_rate : float = 0.001) -> None:
+    def train(self, inputs : np.ndarray[np.ndarray[float]], outputs : np.ndarray[float], learning_rate : float = 0.001) -> None:
         if len(inputs) != len(outputs):
             raise InvalidInputSizeException()
 
@@ -60,6 +69,24 @@ class Perceptron:
                 self.__weights[j] += direction * diff * (abs(inputs[i][j]) / sum_of_inputs) * learning_rate
 
             self.__bias += direction * diff * (1 / sum_of_inputs) * learning_rate
+
+    def update_weights(self, avg : np.ndarray[float]):
+        self.__weights = np.add(self.__weights, avg)
+    
+    def update_bias(self, avg : float):
+        self.__bias += avg
+
+    def serialize(self): 
+        numpyData = {
+            "weights": self.__weights,
+            "bias": self.__bias,
+        }
+        return numpyData
+    
+    def load(self, data):
+        for i in range(len(data["weights"])):
+            self.__weights = np.array(data["weights"])
+        self.__bias = data["bias"]
 
     def __str__(self) -> str:
         s = "Weights : " + str(self.__weights) + "\n"
