@@ -14,13 +14,12 @@ class KNN:
         self.y_train = y
 
     def predict(self, X):
-        predictions = [self.__predict(x) for x in X]
+        predictions = [self.__predict(X.iloc[x]) for x in range(len(X))]
         return predictions
 
     def __predict(self, x):
         # compute the distance
-        distances = [euclidean_distance(x, x_train) for x_train in self.X_train]
-    
+        distances = [euclidean_distance(x, self.X_train.iloc[x_i]) for x_i in range(len(self.X_train))]
         # get the closest k
         k_indices = np.argsort(distances)[:self.k]
         k_nearest_labels = [self.y_train[i] for i in k_indices]
