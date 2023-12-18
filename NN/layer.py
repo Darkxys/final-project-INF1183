@@ -70,7 +70,8 @@ class Layer:
             for j in range(len(next_layer.get_deltas())):
                 mul = np.multiply(self.__perceptrons[i].get_weights(), next_layer.get_deltas()[j])
                 delta_sums += np.sum(mul)
-            self.__deltas[i] = self.__layer_result[i] * (1 - self.__layer_result[i]) * delta_sums
+            
+            self.__deltas[i] = self.__perceptrons[i].differentiate(self.__layer_result[i]) * delta_sums
     
     def update_weights(self) -> None: 
         for i in range(len(self.__perceptrons)):

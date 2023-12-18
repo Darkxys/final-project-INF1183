@@ -115,7 +115,7 @@ def test_nn():
         LayerConfig(784, ActivationFunctions.Linear),
         LayerConfig(32, ActivationFunctions.Logistic),
         LayerConfig(32, ActivationFunctions.Logistic),
-        LayerConfig(10, ActivationFunctions.Logistic),
+        LayerConfig(10, ActivationFunctions.ReLu),
         # LayerConfig(1, ActivationFunctions.Logistic),
     ]
 

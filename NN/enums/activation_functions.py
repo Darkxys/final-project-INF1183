@@ -14,14 +14,23 @@ def ReLu(input: float) -> float:
         return input
     return 0
 
+def ReLuDif(input: float) -> float: 
+    return input > 0
+
 def Linear(input: float) -> float: 
     return input
+
+def LinearDif(input: float) -> float: 
+    return 1
 
 def Logistic(input: float) -> float:
     return 1 / (1 + math.exp(-input))
 
+def LogisticDif(input: float) -> float:
+    return input * (1 - input)
+
 class ActivationFunctions(Enum): 
-    ReLu = Wrapper(ReLu)
-    Linear = Wrapper(Linear)
-    Logistic = Wrapper(Logistic)
+    ReLu = [Wrapper(ReLu), Wrapper(ReLuDif)]
+    Linear = [Wrapper(Linear), Wrapper(LinearDif)]
+    Logistic = [Wrapper(Logistic), Wrapper(LogisticDif)]
 

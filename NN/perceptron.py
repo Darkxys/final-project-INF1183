@@ -7,16 +7,18 @@ import json
 from json import JSONEncoder
 from numpy_array_encoder import NumpyArrayEncoder
 
-LOW = 0.0
-HIGH = 1.0
-
 class Perceptron: 
     def __init__(self, n: int, activation: ActivationFunctions, is_input = False) -> None:
+        LOW = -0.5
+        HIGH = 0.5
+        if activation == ActivationFunctions.Logistic:
+            LOW = 0
+            HIGH = 1 / n * 10
         if not is_input: 
-            self.__weights : np.ndarray[float] = [random.uniform(LOW, HIGH / n * 10) for _ in range(n)]
+            self.__weights : np.ndarray[float] = [random.uniform(LOW, HIGH) for _ in range(n)]
             self.__bias : float = random.uniform(LOW, HIGH)
         else: 
-            self.__weights : np.ndarray[float] = [0.5 for _ in range(n)]
+            self.__weights : np.ndarray[float] = [1 for _ in range(n)]
             self.__bias : float = 0.0
         self.__activation : ActivationFunctions = activation
 
@@ -27,7 +29,10 @@ class Perceptron:
         return 2 * (expected - output)
     
     def activate(self, input : float) -> float:
-        return self.__activation.value(input)
+        return self.__activation.value[0](input)
+    
+    def differentiate(self, input : float) -> float:
+        return self.__activation.value[1](input)
     
     def predict(self, inputs : np.ndarray[float]) -> float: 
         if len(inputs) != len(self.__weights):
@@ -37,7 +42,7 @@ class Perceptron:
         for i in range(len(self.__weights)):
             result += self.__weights[i] * inputs[i]
 
-            if self.__weights[i] != 0.5: 
+            if self.__weights[i] != 1: 
                 i = i
 
         return self.activate(result)
