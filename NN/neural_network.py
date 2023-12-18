@@ -66,9 +66,9 @@ class NeuralNetwork:
                     if (x_test_data is not None and y_test_data is not None): 
                         self.__internal_test(x_test_data[800:], y_test_data[800:])
             self.__update_weights()
-            self.export_model("./models/model_" + str(j) + ".json")
             if (x_test_data is not None and y_test_data is not None): 
-                self.__internal_test(x_test_data, y_test_data)
+                acc = self.__internal_test(x_test_data, y_test_data)
+            self.export_model("./models/model_" + str(j) + "_" + str(acc) + ".json")
 
     def __internal_test(self, x_test_data, y_test_data):
         good = 0
@@ -82,6 +82,7 @@ class NeuralNetwork:
 
         acc = good / total
         print("Result : " + str(acc))
+        return acc
 
     def export_model(self, file_path = "./models/model.json") -> None:
         serialized_layers = []
