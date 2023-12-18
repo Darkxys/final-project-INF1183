@@ -62,9 +62,9 @@ class NeuralNetwork:
                     print(str(i) + " completed.")
                     self.__update_weights()
                 self.__train_step(inputs[i], outputs[i], learning_rate)
-                if i % 200 == 0 and i > 0: 
+                if i % 500 == 0 and i > 0: 
                     if (x_test_data is not None and y_test_data is not None): 
-                        self.__internal_test(x_test_data, y_test_data)
+                        self.__internal_test(x_test_data[800:], y_test_data[800:])
             self.__update_weights()
             self.export_model("./models/model_" + str(j) + ".json")
             if (x_test_data is not None and y_test_data is not None): 

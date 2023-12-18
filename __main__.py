@@ -91,12 +91,12 @@ def test_perceptron():
 # test_perceptron()
     
 def test_nn():
-    index_number= np.random.permutation(1200)
+    index_number= np.random.permutation(10000)
     x1,y1=mnist.data.loc[index_number],mnist.target.loc[index_number]
     x1.reset_index(drop=True,inplace=True)
     y1.reset_index(drop=True,inplace=True)
-    x_train , x_test = x1[:1000], x1[1000:]
-    y_train , y_test = y1[:1000], y1[1000:]
+    x_train , x_test = x1[:9000], x1[9000:]
+    y_train , y_test = y1[:9000], y1[9000:]
 
     np_x_train = x_train.to_numpy().astype(float)
     np_y_train = y_train.to_numpy().astype(int)
@@ -113,6 +113,7 @@ def test_nn():
         # LayerConfig(6, ActivationFunctions.Linear),
         # LayerConfig(2, ActivationFunctions.ReLu),
         LayerConfig(784, ActivationFunctions.Linear),
+        LayerConfig(32, ActivationFunctions.Logistic),
         LayerConfig(32, ActivationFunctions.Logistic),
         LayerConfig(10, ActivationFunctions.Logistic),
         # LayerConfig(1, ActivationFunctions.Logistic),

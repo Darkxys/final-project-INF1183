@@ -13,7 +13,7 @@ HIGH = 1.0
 class Perceptron: 
     def __init__(self, n: int, activation: ActivationFunctions, is_input = False) -> None:
         if not is_input: 
-            self.__weights : np.ndarray[float] = [random.uniform(LOW, HIGH) for _ in range(n)]
+            self.__weights : np.ndarray[float] = [random.uniform(LOW, HIGH / n * 10) for _ in range(n)]
             self.__bias : float = random.uniform(LOW, HIGH)
         else: 
             self.__weights : np.ndarray[float] = [0.5 for _ in range(n)]
@@ -36,6 +36,9 @@ class Perceptron:
         result : float = self.__bias
         for i in range(len(self.__weights)):
             result += self.__weights[i] * inputs[i]
+
+            if self.__weights[i] != 0.5: 
+                i = i
 
         return self.activate(result)
 
