@@ -1,7 +1,7 @@
 from NN.enums.activation_functions import ActivationFunctions
 
 class LayerConfig:
-    def __init__(self, n : int, activation : ActivationFunctions) -> None:
+    def __init__(self, n : int, activation : ActivationFunctions = None) -> None:
         self.__size : int = n
         self.__activation : ActivationFunctions = activation
 

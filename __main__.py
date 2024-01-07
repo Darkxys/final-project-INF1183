@@ -4,13 +4,12 @@ from sklearn.preprocessing import normalize
 import numpy as np
 import matplotlib.pyplot as plt
 from KNN import KNN
+from NN.enums.layer_types import LayerTypes
+import pandas as pd
 
 import json
 from json import JSONEncoder
 from numpy_array_encoder import NumpyArrayEncoder
-
-from NN.trainers.base_trainer import BaseTrainer
-from NN.perceptron import Perceptron
 from NN.enums.activation_functions import ActivationFunctions
 
 from NN.neural_network import NeuralNetwork
@@ -35,53 +34,39 @@ def test_knn():
 # test_knn()
     
 def test_nn():
-    index_number= np.random.permutation(10000)
-    x1,y1=mnist.data.loc[index_number],mnist.target.loc[index_number]
-    x1.reset_index(drop=True,inplace=True)
-    y1.reset_index(drop=True,inplace=True)
-    x_train , x_test = x1[:9000], x1[9000:]
-    y_train , y_test = y1[:9000], y1[9000:]
+    data = pd.read_csv('./data/train.csv')
+    data = np.array(data)
+    m, n = data.shape
+    np.random.shuffle(data) # shuffle before splitting into dev and training sets
 
-    np_x_train = x_train.to_numpy().astype(float)
-    np_y_train = y_train.to_numpy().astype(int)
-    np_x_test = x_test.to_numpy().astype(float)
-    np_y_test = y_test.to_numpy().astype(int)
-    norm_x_train = (np_x_train + 1) / 256
-    norm_x_test = (np_x_test + 1) / 256
-
-    processed_y_train = [np.eye(10)[index] for index in np_y_train]
-    processed_y_train = np.array(processed_y_train)
+    data_dev = data[0:1000].T
+    Y_dev = data_dev[0]
+    X_dev = data_dev[1:n]
+    X_dev = X_dev / 255.
+    
+    data_train = data[1000:m].T
+    Y_train = data_train[0]
+    X_train = data_train[1:n]
+    X_train = X_train / 255.
+    _,m_train = X_train.shape
 
     configs = [
-        LayerConfig(784, ActivationFunctions.Linear),
-        # LayerConfig(32, ActivationFunctions.Logistic),
-        LayerConfig(10, ActivationFunctions.Logistic),
+        LayerConfig(784),
+        LayerConfig(n=20, activation=ActivationFunctions.Logistic),
+        LayerConfig(n=10, activation=ActivationFunctions.ReLu),
+        LayerConfig(n=10, activation=ActivationFunctions.Softmax),
     ]
 
     nn = NeuralNetwork(configs)
 
-    nn.train_batch(
-        norm_x_train, 
-        processed_y_train, 
-        x_test_data=norm_x_test,
-        y_test_data=np_y_test,
-        epoch=1000,
-        learning_rate=0.1, 
-        batch_size=10
+    nn.training(
+        m=m,
+        X=X_train,
+        Y=Y_train, 
+        X_test=X_dev,
+        Y_test=Y_dev,
+        epoch=2000,
+        learning_rate=0.1,
     )
-
-    good = 0
-    total = 0
-    for i in range(len(norm_x_test)):
-        res = nn.predict(norm_x_test[i])
-        max_index = np.argmax(res)
-        if max_index == np_y_test[i]:
-            good += 1
-        total += 1
-
-    acc = good / total
-    print("Result : " + str(acc))
-
-    nn.export_model()
     
 test_nn()
